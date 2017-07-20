@@ -10,7 +10,7 @@ from django.db.models import QuerySet, Q
 from django.utils.encoding import python_2_unicode_compatible, smart_text
 from django.utils.six import iteritems, integer_types
 from django.utils.translation import ugettext_lazy as _
-
+from django.contrib.auth.models import User
 from jsonfield.fields import JSONField
 
 
@@ -31,7 +31,10 @@ class LogEntryManager(models.Manager):
         :rtype: LogEntry
         """
         changes = kwargs.get('changes', None)
-        pk = self._get_pk_value(instance)
+        if issubclass(instance, User):
+            pk = instance.pk
+        else:
+            pk = self._get_pk_value(instance)
 
         if changes is not None:
             kwargs.setdefault('content_type', ContentType.objects.get_for_model(instance))
