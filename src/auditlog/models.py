@@ -31,7 +31,7 @@ class LogEntryManager(models.Manager):
         :rtype: LogEntry
         """
         changes = kwargs.get('changes', None)
-        if issubclass(instance, User):
+        if issubclass(type(instance), User):
             pk = instance.pk
         else:
             pk = self._get_pk_value(instance)
